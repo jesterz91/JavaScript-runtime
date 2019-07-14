@@ -46,17 +46,30 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       $(function() {
-        var socket = io();
+        const socket = io();
+        const sender = Date.now();
 
         $("form").submit(function(e) {
           e.preventDefault(); // prevents page reloading
-          socket.emit("chat message", $("#m").val());
+
+          const message = {
+            event: "chat",
+            sender,
+            receive: "all",
+            msg: $("#m").val(),
+            type: "text"
+          };
+
+          //   socket.emit("chat message", $("#m").val());
+          socket.emit("chat message", message);
           $("#m").val("");
           return false;
         });
 
-        socket.on("chat message", function(msg) {
-          $("#messages").append($("<li>").text(msg));
+        socket.on("chat message", function(message) {
+          $("#messages").append(
+            $("<li>").text(message.sender + " : " + message.msg)
+          );
         });
       });
     </script>

@@ -6,11 +6,12 @@ app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 
 // 클라이언트 연결
 io.on("connection", socket => {
-  console.log("a user connected");
+  const peer = socket.request.connection._peername;
+  console.log("New connection from " + JSON.stringify(peer));
 
   // 메시지 수신
   socket.on("chat message", function(msg) {
-    console.log("message: " + msg);
+    console.log("message: " + JSON.stringify(msg));
 
     // 메시지를 전송한 클라이언트를 제외한 모든 클라이언트에게 메시지를 전송
     //socket.broadcast.emit('hi');
